@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Stock')
+@section('title', 'Data Cabang')
 
 @section('main')
 <div class="main-content">
     <section class="section">
        <div class="section-header d-flex">
-            <h1>Data Stock Pusat</h1>
+            <h1>Data Cabang</h1>
             <div class="section-header-button ml-auto">
-                <a href="" class="btn btn-primary">Tambah Stock</a>
+                <a href="{{ route('pusat.branch.create') }}" class="btn btn-primary">Tambah Cabang</a>
             </div>
         </div>
         <div class="section-body">
@@ -26,24 +26,20 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
-                                        <th>Quantity</th>
-                                        <th>Cost Price</th>
-                                        <th>Selling Price</th>
+                                        <th>Address</th>
                                         <th style="text-align: center;">Action</th>
                                     </tr>
-                                    @forelse ($stocks as $stock)
+                                    @forelse ($branches as $branch)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $stock->product->name }}</td>
-                                            <td>{{ $stock->quantity }}</td>
-                                            <td>Rp. {{ number_format($stock->product->cost_price, 0, ',', '.') }}</td>
-                                            <td>Rp. {{ number_format($stock->product->selling_price, 0, ',', '.') }}</td>
+                                            <td>{{ $branch->name }}</td>
+                                            <td>{{ $branch->address }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
-                                                    <a href="" class="btn btn-sm btn-secondary btn-icon">
+                                                    <a href="{{ route('pusat.branch.show', $branch->id) }}" class="btn btn-sm btn-secondary btn-icon">
                                                         <i class="fas fa-eye"></i> Show
                                                     </a>
-                                                    <a href="" class="btn btn-sm btn-info btn-icon ml-2">
+                                                    <a href="{{ route('pusat.branch.edit', $branch->id) }}" class="btn btn-sm btn-info btn-icon ml-2">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <form action="" method="POST" class="ml-2">
@@ -53,10 +49,6 @@
                                                             <i class="fas fa-times"></i> Delete
                                                         </button>
                                                     </form>
-                                                    <a href="{{ route('pusat.stock.distribution.form', $stock->id) }}"
-                                                        class="btn btn-sm btn-success btn-icon ml-2">
-                                                        <i class="fas fa-share"></i> Send
-                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -68,7 +60,7 @@
                                 </table>
                             </div>
                             <div class="float-right">
-                                {{ $stocks->withQueryString()->links() }}
+                                {{ $branches->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>
@@ -78,4 +70,3 @@
     </section>
 </div>
 @endsection
-

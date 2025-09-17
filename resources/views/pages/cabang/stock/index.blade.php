@@ -2,7 +2,6 @@
 
 @section('title', 'Stock')
 
-
 @section('main')
 <div class="main-content">
     <section class="section">
@@ -19,7 +18,6 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="clearfix mb-3"></div>
                             <div class="table-responsive">
                                 <table class="table-striped table">
                                     <tr>
@@ -39,16 +37,9 @@
                                             <td>Rp. {{ number_format($stock->product->selling_price, 0, ',', '.') }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
-                                                    <a href="" class="btn btn-sm btn-info btn-icon">
-                                                        <i class="fas fa-edit"></i> Edit
+                                                    <a href="" class="btn btn-sm btn-secondary btn-icon">
+                                                        <i class="fas fa-eye"></i> Show
                                                     </a>
-                                                    <form action="" method="POST" class="ml-2">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                            <i class="fas fa-times"></i> Delete
-                                                        </button>
-                                                    </form>
                                                     <a href="{{ route('cabang.stock.distribution.form', $stock->id) }}"
                                                         class="btn btn-sm btn-success btn-icon ml-2">
                                                         <i class="fas fa-share"></i> Send

@@ -22,10 +22,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Staff</h4>
+                                <h4>Product</h4>
                             </div>
                             <div class="card-body">
-                                10
+                                {{ $totalProduct }}
                             </div>
                         </div>
                     </div>
@@ -38,10 +38,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Dosen</h4>
+                                <h4>Sales</h4>
                             </div>
                             <div class="card-body">
-                                10
+                                {{ $totalSales }}
                             </div>
                         </div>
                     </div>

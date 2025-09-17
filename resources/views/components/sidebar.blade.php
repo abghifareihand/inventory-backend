@@ -48,9 +48,30 @@
                 </li>
                 <li class="{{ Request::is('pusat/stock') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('pusat.stock.index') }}">
-                        <i class="fa fa-home"></i> <span>Stock</span>
+                        <i class="fa fa-home"></i> <span>Stock Pusat</span>
                     </a>
                 </li>
+                <li class="{{ Request::is('pusat/branch') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('pusat.branch.index') }}">
+                        <i class="fa fa-home"></i> <span>Cabang</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('pusat/user') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('pusat.user.index') }}">
+                        <i class="fa fa-home"></i> <span>Akun Cabang</span>
+                    </a>
+                </li>
+               <li class="nav-item dropdown {{ Request::is('pusat/stock*') || Request::is('pusat/stock/sales*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown"><i class="fa fa-layer-group"></i><span>All Stock</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ Request::is('pusat/stock/cabang*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pusat.stock.cabang') }}">Stock Cabang</a>
+                    </li>
+                    <li class="{{ Request::is('pusat/stock/sales*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pusat.stock.sales') }}">Stock Sales</a>
+                    </li>
+                </ul>
+            </li>
                 {{-- Tambah menu pusat lainnya di sini --}}
             @endif
 
@@ -63,6 +84,11 @@
                 <li class="{{ Request::is('cabang/stock') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('cabang.stock.index') }}">
                         <i class="fa fa-home"></i> <span>Stock</span>
+                    </a>
+                </li>
+                <li class="{{ Request::is('cabang/user') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('cabang.user.index') }}">
+                        <i class="fa fa-home"></i> <span>Akun Sales</span>
                     </a>
                 </li>
                 {{-- Tambah menu cabang lainnya di sini --}}

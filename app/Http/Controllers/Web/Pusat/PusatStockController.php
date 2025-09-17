@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 
 class PusatStockController extends Controller
 {
+     // Stok Pusat
     public function index()
     {
         // Ambil stok pusat (branch_id = null)
@@ -18,6 +19,29 @@ class PusatStockController extends Controller
                     ->paginate(10);
 
         return view('pages.pusat.stock.index', compact('stocks'));
+    }
+
+    // Stok Cabang
+    public function stockCabang()
+    {
+        $stocks = Stock::with('product', 'branch')
+                    ->whereNotNull('branch_id')
+                    ->whereNull('user_id') // stok cabang, bukan sales
+                    ->orderBy('branch_id')
+                    ->paginate(10);
+
+        return view('pages.pusat.stock.cabang', compact('stocks'));
+    }
+
+    // Stok Sales
+    public function stockSales()
+    {
+        $stocks = Stock::with('product', 'user')
+                    ->whereNotNull('user_id') // stok per sales
+                    ->orderBy('user_id')
+                    ->paginate(10);
+
+        return view('pages.pusat.stock.sales', compact('stocks'));
     }
 
     public function distributionForm(Stock $stock)

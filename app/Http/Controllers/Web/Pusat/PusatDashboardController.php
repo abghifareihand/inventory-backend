@@ -13,6 +13,7 @@ class PusatDashboardController extends Controller
     {
         $totalProduct = Product::count();
         $totalCabang = User::where('role', 'cabang')->count();
-        return view('pages.pusat.dashboard', compact('totalProduct', 'totalCabang'));
+        $totalSales = User::where('role', 'sales')->count();
+        return view('pages.pusat.dashboard', compact('totalProduct', 'totalCabang', 'totalSales'));
     }
 }
