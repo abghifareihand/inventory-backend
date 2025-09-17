@@ -25,9 +25,9 @@ class UserSeeder extends Seeder
         // Admin Pusat
         User::create([
             'name' => 'Admin Pusat',
-            'username' => 'adminpusat',
+            'username' => 'pusat',
             'password' => Hash::make('password'),
-            'role' => 'admin_pusat',
+            'role' => 'pusat',
         ]);
 
         // Cabang
@@ -43,17 +43,17 @@ class UserSeeder extends Seeder
         // Admin Cabang
         User::create([
             'name' => 'Admin Jakarta',
-            'username' => 'adminjakarta',
+            'username' => 'cabangjakarta',
             'password' => Hash::make('password'),
-            'role' => 'admin_cabang',
+            'role' => 'cabang',
             'branch_id' => $branch1->id
         ]);
 
         User::create([
             'name' => 'Admin Bandung',
-            'username' => 'adminbandung',
+            'username' => 'cabangbandung',
             'password' => Hash::make('password'),
-            'role' => 'admin_cabang',
+            'role' => 'cabang',
             'branch_id' => $branch2->id
         ]);
 

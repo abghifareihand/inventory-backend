@@ -26,11 +26,5 @@ class ProductSeeder extends Seeder
             // Stok awal di pusat (branch_id = null)
             Stock::create(['product_id'=>$product->id,'branch_id'=>null,'quantity'=>100]);
         }
-
-        // Stok awal cabang 1
-        $branch1 = Branch::find(1);
-        foreach(Product::all() as $product){
-            Stock::create(['product_id'=>$product->id,'branch_id'=>$branch1->id,'quantity'=>50]);
-        }
     }
 }
