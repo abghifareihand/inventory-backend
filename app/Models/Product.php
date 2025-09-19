@@ -10,7 +10,12 @@ class Product extends Model
         'name',
         'description',
         'cost_price',
-        'selling_price'
+        'selling_price',
+        'provider',
+        'category',
+        'zona',
+        'kuota',
+        'expired'
     ];
 
     public function stocks() {

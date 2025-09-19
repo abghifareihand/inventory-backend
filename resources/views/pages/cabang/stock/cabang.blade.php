@@ -6,10 +6,7 @@
 <div class="main-content">
     <section class="section">
        <div class="section-header d-flex">
-            <h1>Data Stock Pusat</h1>
-            <div class="section-header-button ml-auto">
-                <a href="" class="btn btn-primary">Tambah Stock</a>
-            </div>
+            <h1>Data Stock Cabang - {{ Auth::user()->branch->name }}</h1>
         </div>
         <div class="section-body">
             <div class="row">
@@ -39,21 +36,7 @@
                                             <td>Rp. {{ number_format($stock->product->cost_price, 0, ',', '.') }}</td>
                                             <td>Rp. {{ number_format($stock->product->selling_price, 0, ',', '.') }}</td>
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    <a href="" class="btn btn-sm btn-secondary btn-icon">
-                                                        <i class="fas fa-eye"></i> Show
-                                                    </a>
-                                                    <a href="" class="btn btn-sm btn-info btn-icon ml-2">
-                                                        <i class="fas fa-edit"></i> Edit
-                                                    </a>
-                                                    <form action="" method="POST" class="ml-2">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger btn-icon confirm-delete">
-                                                            <i class="fas fa-times"></i> Delete
-                                                        </button>
-                                                    </form>
-                                                    <a href="{{ route('pusat.stock.distribution.form', $stock->id) }}"
+                                                    <a href="{{ route('cabang.stock.distribution.form', $stock->id) }}"
                                                         class="btn btn-sm btn-success btn-icon ml-2">
                                                         <i class="fas fa-share"></i> Send
                                                     </a>
@@ -78,4 +61,3 @@
     </section>
 </div>
 @endsection
-

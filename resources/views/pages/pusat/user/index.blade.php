@@ -22,7 +22,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table-striped table">
+                                <table class="table-striped table table-bordered">
                                     <tr>
                                         <th>#</th>
                                         <th>Name</th>
@@ -42,7 +42,7 @@
                                                     <a href="{{ route('pusat.user.edit', $user->id) }}" class="btn btn-sm btn-info btn-icon ml-2">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
-                                                    <form action="" method="POST" class="ml-2">
+                                                    <form action="{{ route('pusat.user.destroy', $user->id) }}" method="POST" class="ml-2">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-sm btn-danger btn-icon confirm-delete">

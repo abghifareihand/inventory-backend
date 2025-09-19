@@ -12,15 +12,26 @@ class ProductController extends Controller
     {
         $sales = $request->user(); // Sales yang login
 
-        // Ambil stok produk yang bisa dijual, include relasi product
-        $stocks = Stock::where('branch_id', $sales->branch_id)
-                       ->where('quantity', '>', 0)
-                       ->with('product', 'branch')
-                       ->get();
+        // Ambil stok untuk sales ini beserta product
+        $stocks = Stock::where('sales_id', $sales->id)
+                    ->with('product')
+                    ->get();
+
+        // Format output supaya ada info produk + quantity
+        $products = $stocks->map(function($stock) {
+            return [
+                'id' => $stock->product->id,
+                'name' => $stock->product->name,
+                'description' => $stock->product->description,
+                'cost_price' => $stock->product->cost_price,
+                'selling_price' => $stock->product->selling_price,
+                'quantity' => $stock->quantity
+            ];
+        });
 
         return response()->json([
             'status' => 'success',
-            'stocks' => $stocks
+            'products' => $products
         ]);
     }
 }

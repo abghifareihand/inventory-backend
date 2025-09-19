@@ -11,18 +11,35 @@ use Illuminate\Support\Facades\Auth;
 
 class CabangStockController extends Controller
 {
-    public function index(Request $request)
+    public function stockCabang(Request $request)
     {
-        // Ambil ID cabang dari user yang login
         $branchId = Auth::user()->branch_id;
 
-        // Ambil stok yang sudah didistribusikan ke cabang ini
+        // Hanya stok cabang, tanpa ambil stok sales
         $stocks = Stock::with('product')
                     ->where('branch_id', $branchId)
+                    ->whereNull('sales_id')
                     ->paginate(10);
 
-        return view('pages.cabang.stock.index', compact('stocks'));
+        return view('pages.cabang.stock.cabang', compact('stocks'));
     }
+
+    public function stockSales()
+    {
+        $branchId = Auth::user()->branch_id;
+
+        $stocks = Stock::with('product', 'sales')
+            ->whereNotNull('sales_id')
+            ->where('stocks.branch_id', $branchId) // <-- tambahkan nama tabel
+            ->join('users', 'stocks.sales_id', '=', 'users.id')
+            ->orderBy('users.name', 'asc')
+            ->select('stocks.*') // penting supaya paginate tetap jalan
+            ->paginate(10);
+
+        return view('pages.cabang.stock.sales', compact('stocks'));
+    }
+
+
 
     public function distributionForm(Stock $stock)
     {
@@ -71,7 +88,7 @@ class CabangStockController extends Controller
             'type' => 'cabang_to_sales',
         ]);
 
-        return redirect()->route('cabang.stock.index')
+        return redirect()->route('cabang.stock.cabang')
                          ->with('success', 'Stok berhasil didistribusikan ke sales ' . $sales->name);
     }
 }

@@ -15,8 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->string('provider');
+            $table->string('category');
+            $table->string('zona');
+            $table->string('kuota');
+            $table->date('expired');
             $table->decimal('cost_price', 12, 2);
             $table->decimal('selling_price', 12, 2);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -9,7 +9,8 @@ class Stock extends Model
     protected $fillable = [
         'product_id',
         'branch_id',
-        'quantity'
+        'quantity',
+        'sales_id'
     ];
 
     public function product() {
@@ -18,5 +19,9 @@ class Stock extends Model
 
     public function branch() {
         return $this->belongsTo(Branch::class);
+    }
+
+    public function sales(){
+        return $this->belongsTo(User::class, 'sales_id');
     }
 }

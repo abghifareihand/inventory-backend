@@ -5,30 +5,88 @@ namespace App\Http\Controllers\Web\Pusat;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use App\Models\Distribution;
+use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 
 class PusatStockController extends Controller
 {
      // Stok Pusat
-    public function index()
+    public function stockPusat()
     {
         // Ambil stok pusat (branch_id = null)
         $stocks = Stock::with('product')
                     ->whereNull('branch_id')
+                    ->whereNull('sales_id')
                     ->paginate(10);
 
-        return view('pages.pusat.stock.index', compact('stocks'));
+        return view('pages.pusat.stock.pusat', compact('stocks'));
     }
+
+    public function createStockPusat()
+    {
+        $products = Product::all();
+        return view('pages.pusat.stock.create', compact('products'));
+    }
+
+    public function storeStockPusat(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:0',
+        ], [
+            'product_id.required' => 'Produk harus dipilih!',
+            'quantity.required' => 'Jumlah stok tidak boleh kosong!',
+            'quantity.integer' => 'Jumlah stok harus berupa angka!',
+            'quantity.min' => 'Jumlah stok minimal 0!',
+        ]);
+
+        // Ambil stock lama atau buat baru
+        $stock = Stock::firstOrNew([
+            'product_id' => $request->product_id,
+            'branch_id' => null,
+            'sales_id' => null,
+        ]);
+
+        // Tambahkan quantity baru ke stock lama
+        $stock->quantity += $request->quantity;
+        $stock->save();
+
+        return redirect()->route('pusat.stock.pusat')
+                        ->with('success', 'Stok pusat berhasil diperbarui');
+    }
+
+    public function editStockPusat(Stock $stock)
+    {
+        return view('pages.pusat.stock.edit', compact('stock'));
+    }
+
+    public function updateStockPusat(Request $request, Stock $stock)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:0',
+        ], [
+            'quantity.required' => 'Jumlah stok tidak boleh kosong!',
+            'quantity.integer' => 'Jumlah stok harus berupa angka!',
+            'quantity.min' => 'Jumlah stok minimal 0!',
+        ]);
+
+        $stock->quantity = $request->quantity;
+        $stock->save();
+
+        return redirect()->route('pusat.stock.pusat')
+                        ->with('success', 'Stok pusat berhasil diperbarui');
+    }
+
+
 
     // Stok Cabang
     public function stockCabang()
     {
         $stocks = Stock::with('product', 'branch')
-                    ->whereNotNull('branch_id')
-                    ->whereNull('user_id') // stok cabang, bukan sales
-                    ->orderBy('branch_id')
-                    ->paginate(10);
+            ->whereNotNull('branch_id')
+            ->whereNull('sales_id')
+            ->paginate(10);
 
         return view('pages.pusat.stock.cabang', compact('stocks'));
     }
@@ -36,10 +94,9 @@ class PusatStockController extends Controller
     // Stok Sales
     public function stockSales()
     {
-        $stocks = Stock::with('product', 'user')
-                    ->whereNotNull('user_id') // stok per sales
-                    ->orderBy('user_id')
-                    ->paginate(10);
+        $stocks = Stock::with('product', 'sales')
+            ->whereNotNull('sales_id')
+            ->paginate(10);
 
         return view('pages.pusat.stock.sales', compact('stocks'));
     }
@@ -86,7 +143,7 @@ class PusatStockController extends Controller
             'type' => 'pusat_to_cabang',
         ]);
 
-        return redirect()->route('pusat.stock.index')->with('success', 'Stok berhasil didistribusikan ke cabang ' . $branch->name);
+        return redirect()->route('pusat.stock.pusat')->with('success', 'Stok berhasil didistribusikan ke cabang ' . $branch->name);
 
     }
 

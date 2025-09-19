@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Stock;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
 use Illuminate\Http\Request;
@@ -10,49 +11,115 @@ use Illuminate\Http\Request;
 class TransactionController extends Controller
 {
     public function index(Request $request){
-        $transactions = Transaction::where('sales_id',$request->user()->id)
-            ->with('items.product','outlet')->get();
-        return response()->json($transactions);
+        $transactions = Transaction::where('sales_id', $request->user()->id)
+            ->with('items.product','outlet')
+            ->latest() // transaksi terbaru dulu
+            ->get();
+
+        // Format rapi
+        $data = $transactions->map(function($transaction){
+            return [
+                'id' => $transaction->id,
+                'outlet' => [
+                    'id' => $transaction->outlet->id,
+                    'name' => $transaction->outlet->name,
+                ],
+                'total' => $transaction->total,
+                'profit' => $transaction->profit,
+                'created_at' => $transaction->created_at->format('Y-m-d H:i:s'),
+                'items' => $transaction->items->map(function($item){
+                    return [
+                        'id' => $item->id,
+                        'product_id' => $item->product->id,
+                        'name' => $item->product->name,
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                        'cost_price' => $item->cost_price,
+                        'subtotal' => $item->price * $item->quantity,
+                    ];
+                })
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'transactions' => $data
+        ]);
     }
+
 
     public function store(Request $request){
         $request->validate([
             'outlet_id'=>'required|exists:outlets,id',
-            'items'=>'required|array',
+            'items'=>'required|array|min:1',
             'items.*.product_id'=>'required|exists:products,id',
             'items.*.quantity'=>'required|integer|min:1',
             'gps_lat'=>'required|string',
             'gps_lng'=>'required|string'
         ]);
 
+        $sales = $request->user();
         $total = 0;
+        $profit = 0;
+
+        // Cek stok sales dulu
+        foreach($request->items as $item){
+            $stock = Stock::where('sales_id', $sales->id)
+                        ->where('product_id', $item['product_id'])
+                        ->first();
+
+            if(!$stock || $stock->quantity < $item['quantity']){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Stok produk ID {$item['product_id']} tidak cukup"
+                ], 400);
+            }
+        }
+
+        // Buat transaksi
         $transaction = Transaction::create([
-            'sales_id'=>$request->user()->id,
-            'outlet_id'=>$request->outlet_id,
-            'branch_id'=>$request->user()->branch_id,
-            'gps_lat'=>$request->gps_lat,
-            'gps_lng'=>$request->gps_lng,
-            'total'=>0, // nanti update
-            'profit'=>0
+            'sales_id' => $sales->id,
+            'outlet_id' => $request->outlet_id,
+            'branch_id' => $sales->branch_id,
+            'gps_lat' => $request->gps_lat,
+            'gps_lng' => $request->gps_lng,
+            'total' => 0, // nanti update
+            'profit' => 0
         ]);
 
+        // Simpan item transaksi & update stok
         foreach($request->items as $item){
             $product = \App\Models\Product::find($item['product_id']);
             $price = $product->selling_price;
             $cost = $product->cost_price;
 
             TransactionItem::create([
-                'transaction_id'=>$transaction->id,
-                'product_id'=>$product->id,
-                'quantity'=>$item['quantity'],
-                'price'=>$price,
-                'cost_price'=>$cost
+                'transaction_id' => $transaction->id,
+                'product_id' => $product->id,
+                'quantity' => $item['quantity'],
+                'price' => $price,
+                'cost_price' => $cost
             ]);
 
             $total += $price * $item['quantity'];
+            $profit += ($price - $cost) * $item['quantity'];
+
+            // Kurangi stok sales
+            $stock = Stock::where('sales_id', $sales->id)
+                        ->where('product_id', $product->id)
+                        ->first();
+            $stock->quantity -= $item['quantity'];
+            $stock->save();
         }
 
-        $transaction->update(['total'=>$total,'profit'=>$transaction->profit]);
-        return response()->json($transaction->load('items.product','outlet'));
+        // Update total & profit
+        $transaction->update(['total' => $total, 'profit' => $profit]);
+
+        return response()->json([
+            'status' => 'success',
+            'transaction_id' => $transaction->id,
+            'total' => $total
+        ]);
     }
+
 }

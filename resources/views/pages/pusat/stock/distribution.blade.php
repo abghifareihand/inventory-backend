@@ -27,11 +27,14 @@
                     <input type="hidden" name="stock_id" value="{{ $stock->id }}">
 
                     <div class="card-body">
-                        <!-- Product Name -->
+                       <!-- Product Info -->
                         <div class="form-group">
                             <label>Product</label>
-                            <input type="text" class="form-control" value="{{ $stock->product->name }}" readonly>
+                            <input type="text" class="form-control"
+                                value="{{ $stock->product->name }} ({{ $stock->product->provider }} | {{ $stock->product->kuota }} | {{ $stock->product->category }} | {{ $stock->product->zona }})"
+                                readonly>
                         </div>
+
 
                         <!-- Notes -->
                         <div class="form-group">
@@ -65,7 +68,7 @@
 
                     <div class="card-footer text-right">
                         <button class="btn btn-primary">Submit</button>
-                        <a href="{{ route('pusat.stock.index') }}" class="btn btn-secondary">Batal</a>
+                        <a href="{{ route('pusat.stock.pusat') }}" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>

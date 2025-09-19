@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Outlet extends Model
 {
     protected $fillable = [
+        'created_by',
+        'id_outlet',
+        'name_outlet',
+        'address_outlet',
         'name',
-        'owner_name',
         'phone',
-        'gps_lat',
-        'gps_lng'
+        'latitude',
+        'longitude'
     ];
 
     public function transactions() {

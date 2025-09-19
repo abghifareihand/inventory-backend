@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('outlets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('owner_name')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('id_outlet');
+            $table->string('name_outlet');
+            $table->string('address_outlet');
+            $table->string('name')->nullable();
             $table->string('phone')->nullable();
-            $table->string('gps_lat')->nullable();
-            $table->string('gps_lng')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->timestamps();
         });
     }

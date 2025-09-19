@@ -53,7 +53,7 @@ class PusatUserController extends Controller
         ]);
 
         return redirect()->route('pusat.user.index')
-            ->with('success', 'User cabang berhasil dibuat');
+            ->with('success', 'User akun cabang berhasil dibuat');
     }
 
     public function edit(User $user)
@@ -89,6 +89,13 @@ class PusatUserController extends Controller
         $user->save();
 
         return redirect()->route('pusat.user.index')
-            ->with('success', 'User cabang berhasil diperbarui');
+            ->with('success', 'User akun cabang berhasil diperbarui');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete(); // Hapus user cabang
+        return redirect()->route('pusat.user.index')
+                        ->with('success', 'User akun cabang berhasil dihapus');
     }
 }

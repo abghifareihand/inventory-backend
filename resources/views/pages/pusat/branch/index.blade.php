@@ -37,7 +37,7 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     <a href="{{ route('pusat.branch.show', $branch->id) }}" class="btn btn-sm btn-secondary btn-icon">
-                                                        <i class="fas fa-eye"></i> Show
+                                                        <i class="fas fa-eye"></i> Detail
                                                     </a>
                                                     <a href="{{ route('pusat.branch.edit', $branch->id) }}" class="btn btn-sm btn-info btn-icon ml-2">
                                                         <i class="fas fa-edit"></i> Edit

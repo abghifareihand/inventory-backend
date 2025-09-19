@@ -8,7 +8,7 @@
        <div class="section-header d-flex">
             <h1>Data Akun Sales</h1>
             <div class="section-header-button ml-auto">
-                <a href="" class="btn btn-primary">Tambah Akun</a>
+                <a href="{{ route('cabang.user.create') }}" class="btn btn-primary">Tambah Akun</a>
             </div>
         </div>
         <div class="section-body">
@@ -36,8 +36,7 @@
                                             <td>{{ $user->username }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
-
-                                                    <a href="" class="btn btn-sm btn-info btn-icon ml-2">
+                                                    <a href="{{ route('cabang.user.edit', $user->id) }}" class="btn btn-sm btn-info btn-icon ml-2">
                                                         <i class="fas fa-edit"></i> Edit
                                                     </a>
                                                     <form action="" method="POST" class="ml-2">

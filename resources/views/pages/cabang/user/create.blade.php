@@ -1,23 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Akun')
-
-@push('style')
-    <!-- CSS Libraries -->
-    <link rel="stylesheet"
-        href="{{ asset('library/selectric/public/selectric.css') }}">
-@endpush
+@section('title', 'Tambah Akun Sales')
 
 @section('main')
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Tambah Akun</h1>
+            <h1>Tambah Akun Sales</h1>
         </div>
 
         <div class="section-body">
             <div class="card">
-                <form action="{{ route('pusat.user.store') }}" method="POST">
+                <form action="{{ route('cabang.user.store') }}" method="POST">
                     @csrf
                     <div class="card-body">
 
@@ -61,28 +55,18 @@
                             </div>
                         </div>
 
-
-                        <!-- Cabang -->
+                        <!-- Cabang otomatis -->
                         <div class="form-group">
                             <label>Cabang</label>
-                            <select name="branch_id" class="form-control selectric @error('branch_id') is-invalid @enderror" required>
-                                <option value="">-- Pilih Cabang --</option>
-                                @foreach($branches as $branch)
-                                    <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>
-                                        {{ $branch->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('branch_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <input type="text" class="form-control" value="{{ Auth::user()->branch->name }}" disabled>
+                            <small class="text-muted">Cabang ini otomatis terhubung dengan akun sales</small>
                         </div>
 
                     </div>
 
                     <div class="card-footer text-right">
                         <button class="btn btn-primary">Submit</button>
-                        <a href="{{ route('pusat.user.index') }}" class="btn btn-secondary">Batal</a>
+                        <a href="{{ route('cabang.user.index') }}" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>
@@ -90,8 +74,3 @@
     </section>
 </div>
 @endsection
-
-@push('scripts')
-    <!-- JS Libraies -->
-    <script src="{{ asset('library/selectric/public/jquery.selectric.min.js') }}"></script>
-@endpush

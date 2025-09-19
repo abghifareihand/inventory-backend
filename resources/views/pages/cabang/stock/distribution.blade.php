@@ -66,7 +66,7 @@
 
                     <div class="card-footer text-right">
                         <button class="btn btn-primary">Submit</button>
-                        <a href="{{ route('cabang.stock.index') }}" class="btn btn-secondary">Batal</a>
+                        <a href="{{ route('cabang.stock.cabang') }}" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>
