@@ -48,12 +48,15 @@
                         <!-- Branch -->
                         <div class="form-group">
                             <label>Cabang</label>
-                            <select name="branch_id" class="form-control selectric" required>
+                            <select name="branch_id" class="form-control selectric @error('branch_id') is-invalid @enderror">
                                 <option value="">-- Pilih Cabang --</option>
                                 @foreach($branches as $branch)
                                     <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
+                            @error('branch_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <!-- Quantity -->

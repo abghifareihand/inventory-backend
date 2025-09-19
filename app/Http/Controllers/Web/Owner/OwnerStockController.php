@@ -90,13 +90,19 @@ class OwnerStockController extends Controller
                 'stock_id' => 'required|exists:stocks,id',
                 'branch_id' => 'required|exists:branches,id',
                 'quantity' => 'required|integer|min:1',
+            ],[
+                'branch_id.required' => 'Cabang harus dipilih!',
+                'quantity.required' => 'Jumlah stok tidak boleh kosong!',
+                'quantity.min' => 'Jumlah stok minimal 1!',
             ]);
 
             $stock = Stock::findOrFail($request->stock_id);
             $branch = Branch::findOrFail($request->branch_id);
 
-            if($request->quantity > $stock->quantity) {
-                return redirect()->back()->with('error', 'Stok pusat tidak cukup');
+            if ($request->quantity > $stock->quantity) {
+                return redirect()->back()
+                                ->withInput()
+                                ->withErrors(['quantity' => "Jumlah stok tidak boleh lebih dari {$stock->quantity}"]);
             }
 
             // Kurangi stok pusat
@@ -151,23 +157,30 @@ class OwnerStockController extends Controller
             'stock_id' => 'required|exists:stocks,id',
             'sales_id' => 'required|exists:users,id',
             'quantity' => 'required|integer|min:1',
+        ],[
+            'sales_id.required' => 'Sales harus dipilih!',
+            'quantity.required' => 'Jumlah stok tidak boleh kosong!',
+            'quantity.min' => 'Jumlah stok minimal 1!',
         ]);
 
         $stock = Stock::findOrFail($request->stock_id);
         $sales = User::findOrFail($request->sales_id);
 
         if ($request->quantity > $stock->quantity) {
-            return redirect()->back()->with('error', 'Stok cabang tidak cukup');
+            return redirect()->back()
+                            ->withInput()
+                            ->withErrors(['quantity' => "Jumlah stok tidak boleh lebih dari {$stock->quantity}"]);
         }
 
-        // Kurangi stok cabang
+        // Kurangi stok cabang/pusat
         $stock->quantity -= $request->quantity;
         $stock->save();
 
-        // Tambah stok ke sales
+        // Tambah stok ke sales dan simpan branch_id
         $salesStock = Stock::firstOrNew([
             'product_id' => $stock->product_id,
-            'sales_id' => $request->sales_id,
+            'branch_id' => $stock->branch_id, // <-- penting supaya filter cabang bisa jalan
+            'sales_id' => $sales->id,
         ]);
         $salesStock->quantity += $request->quantity;
         $salesStock->save();
@@ -175,16 +188,16 @@ class OwnerStockController extends Controller
         // Catat distribusi
         Distribution::create([
             'from_branch_id' => $stock->branch_id,
-            'to_branch_id' => null,
-            'to_sales_id' => $request->sales_id,
+            'to_sales_id' => $sales->id,
             'product_id' => $stock->product_id,
             'quantity' => $request->quantity,
-            'type' => 'cabang_to_sales',
+            'type' => 'cabang_to_sales', // bisa tetap sama tipe
         ]);
 
         return redirect()->route('owner.stock.cabang.index')
                         ->with('success', 'Stok berhasil didistribusikan ke sales ' . $sales->name);
     }
+
 
 
     // ===== STOCK SALES =====

@@ -23,12 +23,12 @@ class UserSeeder extends Seeder
         ]);
 
         // Admin Pusat
-        User::create([
-            'name' => 'Admin Pusat',
-            'username' => 'pusat',
-            'password' => Hash::make('password'),
-            'role' => 'pusat',
-        ]);
+        // User::create([
+        //     'name' => 'Admin Pusat',
+        //     'username' => 'pusat',
+        //     'password' => Hash::make('password'),
+        //     'role' => 'pusat',
+        // ]);
 
         // Cabang
         // $branch1 = Branch::create([

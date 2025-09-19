@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\Pusat\PusatBranchController;
 use App\Http\Controllers\Web\Pusat\PusatDashboardController;
 use App\Http\Controllers\Web\Pusat\PusatProductController;
 use App\Http\Controllers\Web\Pusat\PusatStockController;
+use App\Http\Controllers\Web\Pusat\PusatTransactionController;
 use App\Http\Controllers\Web\Pusat\PusatUserController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -129,6 +130,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('user/{user}/edit', [PusatUserController::class, 'edit'])->name('pusat.user.edit');
         Route::put('user/{user}', [PusatUserController::class, 'update'])->name('pusat.user.update');
         Route::delete('user/{user}', [PusatUserController::class, 'destroy'])->name('pusat.user.destroy');
+
+        // Transaction Sales
+        Route::get('transaction', [PusatTransactionController::class, 'index'])->name('pusat.transaction.index');
+        Route::get('transactions/{transaction}', [PusatTransactionController::class, 'show'])->name('pusat.transaction.show');
+        Route::post('transactions/edit/{edit}/approve', [PusatTransactionController::class, 'approveEdit'])->name('pusat.transaction.approve');
+        Route::post('transactions/edit/{edit}/reject', [PusatTransactionController::class, 'rejectEdit'])->name('pusat.transaction.reject');
     });
 
     // ================= CABANG =================
@@ -153,6 +160,7 @@ Route::middleware(['auth'])->group(function () {
         // Transaction Sales dari cabang ini
         Route::get('transaction', [CabangTransactionController::class, 'index'])->name('cabang.transaction.index');
         Route::get('transaction/{transaction}', [CabangTransactionController::class, 'show'])->name('cabang.transaction.show');
+        Route::post('transaction/{transaction}/edit-request', [CabangTransactionController::class, 'storeEditRequest'])->name('cabang.transaction.edit-request');
 
 
     });

@@ -45,12 +45,15 @@
                         <!-- Sales -->
                         <div class="form-group">
                             <label>Sales</label>
-                            <select name="sales_id" class="form-control selectric" required>
+                            <select name="sales_id" class="form-control selectric @error('sales_id') is-invalid @enderror">
                                 <option value="">-- Pilih Sales --</option>
                                 @foreach($sales as $salesman)
                                     <option value="{{ $salesman->id }}">{{ $salesman->name }}</option>
                                 @endforeach
                             </select>
+                            @error('sales_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
 

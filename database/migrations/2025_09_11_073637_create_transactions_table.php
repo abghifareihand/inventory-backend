@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('outlet_id')->nullable()->constrained()->cascadeOnDelete();
             $table->decimal('total', 12, 2);
             $table->decimal('profit', 12, 2)->nullable();
-            $table->string('gps_lat')->nullable();
-            $table->string('gps_lng')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->timestamps();
         });
     }

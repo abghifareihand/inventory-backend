@@ -109,9 +109,14 @@
                         <i class="fa fa-building"></i> <span>Cabang</span>
                     </a>
                 </li>
-                <li class="{{ Request::is('pusat/user') ? 'active' : '' }}">
+                {{-- <li class="{{ Request::is('pusat/user') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('pusat.user.index') }}">
                         <i class="fa fa-users"></i> <span>Akun Cabang</span>
+                    </a>
+                </li> --}}
+                <li class="{{ Request::is('pusat/transaction') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('pusat.transaction.index') }}">
+                        <i class="fa fa-receipt"></i> <span>Pengajuan Harga</span>
                     </a>
                 </li>
                 {{-- Tambah menu pusat lainnya di sini --}}
@@ -136,7 +141,7 @@
                 </li>
                 <li class="{{ Request::is('cabang/user') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('cabang.user.index') }}">
-                        <i class="fa fa-users"></i> <span>Akun Sales</span>
+                        <i class="fa fa-user"></i> <span>Akun Sales</span>
                     </a>
                 </li>
                 <li class="{{ Request::is('cabang/transaction') ? 'active' : '' }}">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Cabang;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\TransactionEdit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,4 +39,42 @@ class CabangTransactionController extends Controller
 
         return view('pages.cabang.transaction.show', compact('transaction'));
     }
+
+    public function storeEditRequest(Request $request, Transaction $transaction)
+    {
+        $request->validate([
+            'edit_total' => 'required|numeric|min:1',
+            'edit_reason' => 'required|string|max:500',
+        ], [
+            'edit_total.required' => 'Total baru wajib diisi',
+            'edit_total.numeric' => 'Total baru harus berupa angka',
+            'edit_total.min' => 'Total minimal 1',
+            'edit_reason.required' => 'Alasan wajib diisi',
+        ]);
+
+        // hitung HPP dari items
+        $costTotal = $transaction->items->sum(function ($item) {
+            return ($item->cost_price ?? 0) * ($item->quantity ?? 0);
+        });
+
+        // hitung profit estimasi
+        $editProfit = $request->edit_total - $costTotal;
+
+        // validasi jika profit <= 0
+        if ($editProfit <= 0) {
+            return redirect()->back()->with('error', 'Pengajuan gagal: profit tidak boleh 0 atau minus.');
+        }
+
+        TransactionEdit::create([
+            'transaction_id' => $transaction->id,
+            'edit_total'     => $request->edit_total,
+            'edit_reason'    => $request->edit_reason,
+            'submitted_by'   => Auth::id(),
+            'status'         => 'pending',
+            'edit_profit'    => $editProfit,
+        ]);
+
+        return redirect()->back()->with('success', 'Pengajuan perubahan total berhasil dikirim');
+    }
+
 }

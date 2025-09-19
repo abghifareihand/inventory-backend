@@ -21,7 +21,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table-striped table">
+                                <table class="table-striped table table-bordered">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -46,9 +46,17 @@
                                                 <a href="{{ route('cabang.transaction.show', $transaction->id) }}" class="btn btn-sm btn-secondary btn-icon">
                                                     <i class="fas fa-eye"></i> Detail
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-info btn-icon ml-2">
-                                                    <i class="fas fa-edit"></i> Ajukan
-                                                </a>
+                                                <!-- Tombol Ajukan -->
+                                                @php
+                                                    $hasEdit = $transaction->edits->isNotEmpty();
+                                                @endphp
+
+                                                @if (! $hasEdit)
+                                                    <!-- Tombol Ajukan hanya muncul jika belum ada pengajuan -->
+                                                    <button class="btn btn-sm btn-info btn-icon ml-2" data-toggle="modal" data-target="#editModal-{{ $transaction->id }}">
+                                                        <i class="fas fa-edit"></i> Ajukan
+                                                    </button>
+                                                @endif
                                             </td>
                                         </tr>
                                         @empty
@@ -59,6 +67,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            {{-- Modal harus di luar table-responsive --}}
 
                             <div class="float-right mt-2">
                                 {{ $transactions->withQueryString()->links() }}
@@ -71,4 +80,33 @@
         </div>
     </section>
 </div>
+    @foreach ($transactions as $transaction)
+        <div class="modal fade" id="editModal-{{ $transaction->id }}" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <form action="{{ route('cabang.transaction.edit-request', $transaction->id) }}" method="POST">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Ajukan Perubahan Total</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                    <div class="form-group">
+                        <label>Total Baru</label>
+                        <input type="number" name="edit_total" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Alasan</label>
+                        <textarea name="edit_reason" class="form-control" required></textarea>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Ajukan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    @endforeach
 @endsection

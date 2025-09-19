@@ -55,7 +55,7 @@
                                                     </a>
                                                     <a href="{{ route('pusat.stock.distribution.form', $stock->id) }}"
                                                         class="btn btn-sm btn-success btn-icon ml-2">
-                                                        <i class="fas fa-share"></i> Send
+                                                        <i class="fas fa-share"></i> Send to Cabang
                                                     </a>
                                                 </div>
                                             </td>

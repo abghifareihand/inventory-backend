@@ -57,13 +57,19 @@ class CabangStockController extends Controller
             'stock_id' => 'required|exists:stocks,id',
             'sales_id' => 'required|exists:users,id',
             'quantity' => 'required|integer|min:1',
+        ],[
+            'sales_id.required' => 'Sales harus dipilih!',
+            'quantity.required' => 'Jumlah stok tidak boleh kosong!',
+            'quantity.min' => 'Jumlah stok minimal 1!',
         ]);
 
         $stock = Stock::findOrFail($request->stock_id);
         $sales = User::findOrFail($request->sales_id);
 
         if ($request->quantity > $stock->quantity) {
-            return redirect()->back()->with('error', 'Stok cabang tidak cukup');
+            return redirect()->back()
+                            ->withInput()
+                            ->withErrors(['quantity' => "Jumlah stok tidak boleh lebih dari {$stock->quantity}"]);
         }
 
         // Kurangi stok cabang

@@ -94,11 +94,12 @@ class PusatStockController extends Controller
     // Stok Sales
     public function stockSales()
     {
-        $stocks = Stock::with('product', 'sales')
+        // Ambil semua stock yang sudah punya sales
+        $stocks = Stock::with(['product', 'sales.branch']) // eager load sales beserta cabangnya
             ->whereNotNull('sales_id')
             ->paginate(10);
 
-        return view('pages.pusat.stock.sales', compact('stocks'));
+        return view('pages.owner.stock.sales.index', compact('stocks'));
     }
 
     public function distributionForm(Stock $stock)
@@ -113,13 +114,19 @@ class PusatStockController extends Controller
             'stock_id' => 'required|exists:stocks,id',
             'branch_id' => 'required|exists:branches,id',
             'quantity' => 'required|integer|min:1',
+        ],[
+            'branch_id.required' => 'Cabang harus dipilih!',
+            'quantity.required' => 'Jumlah stok tidak boleh kosong!',
+            'quantity.min' => 'Jumlah stok minimal 1!',
         ]);
 
         $stock = Stock::findOrFail($request->stock_id);
         $branch = Branch::findOrFail($request->branch_id);
 
-        if($request->quantity > $stock->quantity) {
-            return redirect()->back()->with('error', 'Stok pusat tidak cukup');
+        if ($request->quantity > $stock->quantity) {
+            return redirect()->back()
+                            ->withInput()
+                            ->withErrors(['quantity' => "Jumlah stok tidak boleh lebih dari {$stock->quantity}"]);
         }
 
         // Kurangi stok pusat

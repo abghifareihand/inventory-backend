@@ -25,8 +25,8 @@ class TransactionSeeder extends Seeder
             'outlet_id'=>$outlet->id,
             'total'=>15000,
             'profit'=>5000,
-            'gps_lat'=>'-6.200',
-            'gps_lng'=>'106.816',
+            'latitude'=>'-6.200',
+            'longitude'=>'106.816',
         ]);
 
         TransactionItem::create([

@@ -42,38 +42,8 @@
                                 </tr>
                                 <tr>
                                     <th>Total Penjualan</th>
-                                    <td>
-                                        Rp {{ number_format($transaction->total, 0, ',', '.') }}
-
-                                        @php
-                                            $approvedEdit = $transaction->edits()->where('status', 'approved')->latest()->first();
-                                        @endphp
-
-                                        @if($approvedEdit)
-                                            <span class="text-danger">
-                                                (Disetujui oleh {{ $approvedEdit->approvedBy->role }})
-                                            </span>
-                                        @endif
-                                    </td>
+                                    <td>Rp {{ number_format($transaction->total, 0, ',', '.') }}</td>
                                 </tr>
-                                <tr>
-                                    <th>Total Profit</th>
-                                    <td>
-                                        Rp {{ number_format($transaction->profit, 0, ',', '.') }}
-
-                                        @php
-                                            $approvedEdit = $transaction->edits()->where('status', 'approved')->latest()->first();
-                                        @endphp
-
-                                        @if($approvedEdit)
-                                            <span class="text-danger">
-                                                (Disetujui oleh {{ $approvedEdit->approvedBy->role }})
-                                            </span>
-                                        @endif
-                                    </td>
-                                </tr>
-
-
                             </table>
                         </div>
                     </div>

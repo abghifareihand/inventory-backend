@@ -17,16 +17,16 @@ class OutletSeeder extends Seeder
             'name'=>'Toko 1',
             'owner_name'=>'Pak A',
             'phone'=>'08123456789',
-            'gps_lat'=>'-6.200',
-            'gps_lng'=>'106.816'
+            'latitude'=>'-6.200',
+            'longitude'=>'106.816'
         ]);
 
         Outlet::create([
             'name'=>'Toko 2',
             'owner_name'=>'Bu B',
             'phone'=>'08198765432',
-            'gps_lat'=>'-6.201',
-            'gps_lng'=>'106.817'
+            'latitude'=>'-6.201',
+            'longitude'=>'106.817'
         ]);
     }
 }

@@ -61,7 +61,7 @@
                         <!-- Quantity -->
                         <div class="form-group">
                             <label>Quantity</label>
-                            <input type="number" name="quantity" min="1" max="{{ $stock->quantity }}" class="form-control @error('quantity') is-invalid @enderror" value="{{ old('quantity') }}">
+                            <input type="number" name="quantity" min="1" class="form-control @error('quantity') is-invalid @enderror" value="{{ old('quantity') }}">
                             @error('quantity')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

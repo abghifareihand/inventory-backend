@@ -19,11 +19,16 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table-striped table">
+                                <table class="table-striped table table-bordered">
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
+                                        <th>Produk</th>
+                                        <th>Provider</th>
+                                        <th>Kategori</th>
                                         <th>Quantity</th>
+                                        <th>Zona</th>
+                                        <th>Kuota</th>
+                                        <th>Expired</th>
                                         <th>Cost Price</th>
                                         <th>Selling Price</th>
                                         <th style="text-align: center;">Action</th>
@@ -32,20 +37,25 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $stock->product->name }}</td>
+                                            <td>{{ $stock->product->provider }}</td>
+                                            <td>{{ $stock->product->category }}</td>
                                             <td>{{ $stock->quantity }}</td>
+                                            <td>{{ $stock->product->zona }}</td>
+                                            <td>{{ $stock->product->kuota }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($stock->product->expired)->format('d/m/Y') }}</td>
                                             <td>Rp. {{ number_format($stock->product->cost_price, 0, ',', '.') }}</td>
                                             <td>Rp. {{ number_format($stock->product->selling_price, 0, ',', '.') }}</td>
                                             <td>
                                                     <a href="{{ route('cabang.stock.distribution.form', $stock->id) }}"
                                                         class="btn btn-sm btn-success btn-icon ml-2">
-                                                        <i class="fas fa-share"></i> Send
+                                                        <i class="fas fa-share"></i> Send to Sales
                                                     </a>
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Tidak ada data tersedia</td>
+                                        <td colspan="11" class="text-center">Tidak ada data tersedia</td>
                                     </tr>
                                     @endforelse
                                 </table>

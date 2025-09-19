@@ -12,8 +12,8 @@ class Transaction extends Model
         'outlet_id',
         'total',
         'profit',
-        'gps_lat',
-        'gps_lng'
+        'latitude',
+        'longitude'
     ];
 
     public function sales() {
@@ -39,4 +39,10 @@ class Transaction extends Model
             return ($item->price - $item->cost_price) * $item->quantity;
         });
     }
+
+    public function edits()
+    {
+        return $this->hasMany(TransactionEdit::class);
+    }
+
 }

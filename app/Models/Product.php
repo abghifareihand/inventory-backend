@@ -18,6 +18,10 @@ class Product extends Model
         'expired'
     ];
 
+    protected $casts = [
+        'expired' => 'date', 
+    ];
+
     public function stocks() {
         return $this->hasMany(Stock::class);
     }

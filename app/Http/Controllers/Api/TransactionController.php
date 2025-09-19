@@ -54,8 +54,8 @@ class TransactionController extends Controller
             'items'=>'required|array|min:1',
             'items.*.product_id'=>'required|exists:products,id',
             'items.*.quantity'=>'required|integer|min:1',
-            'gps_lat'=>'required|string',
-            'gps_lng'=>'required|string'
+            'latitude'=>'required|string',
+            'longitude'=>'required|string'
         ]);
 
         $sales = $request->user();
@@ -81,8 +81,8 @@ class TransactionController extends Controller
             'sales_id' => $sales->id,
             'outlet_id' => $request->outlet_id,
             'branch_id' => $sales->branch_id,
-            'gps_lat' => $request->gps_lat,
-            'gps_lng' => $request->gps_lng,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'total' => 0, // nanti update
             'profit' => 0
         ]);
